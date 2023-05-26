@@ -1,12 +1,12 @@
-package com.elios.air_hockey_application.common;
+package com.elios.airhockeyapplication.server.entity;
 
 public class GameStateMessage {
-    private double firstPlayerXPos;
-    private double secondPlayerXPos;
-    private int puckXPosition;
-    private int puckYPosition;
-    private int firstPlayerScore;
-    private int secondPlayerScore;
+    private final double firstPlayerXPos;
+    private final double secondPlayerXPos;
+    private final int puckXPosition;
+    private final int puckYPosition;
+    private final int firstPlayerScore;
+    private final int secondPlayerScore;
 
     public GameStateMessage(double firstPlayerXPos, double secondPlayerXPos, int puckXPosition, int puckYPosition, int firstPlayerScore, int secondPlayerScore) {
         this.firstPlayerXPos = firstPlayerXPos;

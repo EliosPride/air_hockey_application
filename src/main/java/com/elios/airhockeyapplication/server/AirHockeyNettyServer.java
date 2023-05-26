@@ -1,11 +1,12 @@
-package com.elios.air_hockey_application.server;
+package com.elios.airhockeyapplication.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
-import static com.elios.air_hockey_application.common.AppConfiguration.PORT;
+import static com.elios.airhockeyapplication.common.AppConfiguration.*;
+
 
 public class AirHockeyNettyServer {
 
@@ -18,8 +19,8 @@ public class AirHockeyNettyServer {
                     .channel(NioServerSocketChannel.class)
                     .childHandler(new AirHockeyServerInitializer());
 
-            ChannelFuture future = bootstrap.bind(PORT).sync();
-            System.out.println("Server started on port " + PORT);
+            ChannelFuture future = bootstrap.bind(HOST, PORT).sync();
+            System.out.println("Server started on: " + HOST + ":" + PORT);
 
             future.channel().closeFuture().sync();
         } finally {

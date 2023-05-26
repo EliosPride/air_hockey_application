@@ -1,6 +1,6 @@
-package com.elios.air_hockey_application.server;
+package com.elios.airhockeyapplication.server.client;
 
-import com.elios.air_hockey_application.common.GameStateMessage;
+import com.elios.airhockeyapplication.server.entity.GameStateMessage;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -33,7 +33,7 @@ public class AirHockeyClient {
             channel = future.channel();
             future.channel().closeFuture().sync();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            System.out.println("Error occurred during" + e.getMessage());
         } finally {
             group.shutdownGracefully();
         }

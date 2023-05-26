@@ -1,6 +1,6 @@
-package com.elios.air_hockey_application;
+package com.elios.airhockeyapplication;
 
-import com.elios.air_hockey_application.server.AirHockeyClient;
+import com.elios.airhockeyapplication.server.client.AirHockeyClient;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static com.elios.air_hockey_application.common.AppConfiguration.*;
+import static com.elios.airhockeyapplication.common.AppConfiguration.*;
 
 public class AirHockeyAppLauncher extends Application {
 
@@ -30,10 +30,8 @@ public class AirHockeyAppLauncher extends Application {
     public int puckXPosition = BACKGROUND_WIDTH / 2;
     public double firstPlayerXPos = BACKGROUND_WIDTH / 2.0;
     public double secondPlayerXPos = BACKGROUND_WIDTH / 2.0;
-    public static final int PLAYER_HEIGHT = 50;
-    public static final int PLAYER_WIDTH = 5;
     public static final int FIRST_PLAYER_Y_POS = 0;
-    public static final int SECOND_PLAYER_Y_POS = BACKGROUND_HEIGHT - PLAYER_WIDTH;
+    public static final int SECOND_PLAYER_Y_POS = BACKGROUND_HEIGHT - PLAYER_HEIGHT;
     private int firstPlayerScore = 0;
     private int secondPlayerScore = 0;
     private int puckXSpeed = 1;
@@ -46,10 +44,13 @@ public class AirHockeyAppLauncher extends Application {
         stage.setTitle(APP_TITLE);
         Canvas canvas = new Canvas(BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
         GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
+        score.add(0, firstPlayerScore);
+        score.add(1, secondPlayerScore);
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(10), event -> run(graphicsContext)));
         timeline.setCycleCount(Timeline.INDEFINITE);
 
+        //if added to check if we are connected;
         canvas.setOnMouseMoved(event -> firstPlayerXPos = event.getX());
         if (checkServerRunning()) {
             canvas.setOnMouseMoved(event -> secondPlayerXPos = event.getX());
@@ -74,9 +75,7 @@ public class AirHockeyAppLauncher extends Application {
     }
 
     private void run(GraphicsContext graphicsContext) {
-        getGameLogic(graphicsContext);
-        score.set(0, firstPlayerScore);
-        score.set(1, secondPlayerScore);
+        runGameLogic(graphicsContext);
 
         if (airHockeyClient != null && checkServerRunning()) {
             airHockeyClient.sendMessage(firstPlayerXPos, secondPlayerXPos, puckXPosition, puckYPosition, firstPlayerScore, secondPlayerScore);
@@ -85,7 +84,8 @@ public class AirHockeyAppLauncher extends Application {
         renderGraphics(graphicsContext);
     }
 
-    public void getGameLogic(GraphicsContext graphicsContext) {
+    public void runGameLogic(GraphicsContext graphicsContext) {
+        //creating objects on game field;
         graphicsContext.setFill(Color.SLATEGRAY);
         graphicsContext.fillRect(0, 0, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
 
@@ -94,22 +94,23 @@ public class AirHockeyAppLauncher extends Application {
 
         graphicsContext.fillText(String.valueOf(firstPlayerScore), 100, 100);
         graphicsContext.fillText(String.valueOf(secondPlayerScore), 500, 900);
-        graphicsContext.fillRect(secondPlayerXPos, SECOND_PLAYER_Y_POS, PLAYER_HEIGHT, PLAYER_WIDTH);
-        graphicsContext.fillRect(firstPlayerXPos, FIRST_PLAYER_Y_POS, PLAYER_HEIGHT, PLAYER_WIDTH);
+        graphicsContext.fillRect(secondPlayerXPos, SECOND_PLAYER_Y_POS, PLAYER_WIDTH, PLAYER_HEIGHT);
+        graphicsContext.fillRect(firstPlayerXPos, FIRST_PLAYER_Y_POS, PLAYER_WIDTH, PLAYER_HEIGHT);
 
         if (gameStarted) {
             puckXPosition += puckXSpeed;
             puckYPosition += puckYSpeed;
 
+            //adding ai;
             if (puckYPosition < BACKGROUND_HEIGHT - BACKGROUND_HEIGHT / 4) {
-                secondPlayerXPos = BACKGROUND_WIDTH / 2 - PLAYER_WIDTH / 2;
+                secondPlayerXPos = BACKGROUND_WIDTH / 2 - PLAYER_HEIGHT / 2;
             } else {
                 moveAIPlayer();
             }
-
             graphicsContext.fillOval(puckXPosition, puckYPosition, PUCK_RADIUS, PUCK_RADIUS);
 
         } else {
+            //restarting game;
             graphicsContext.setStroke(Color.BLACK);
             graphicsContext.setTextAlign(TextAlignment.CENTER);
             graphicsContext.strokeText(GAME_STARTER, BACKGROUND_WIDTH / 2, BACKGROUND_HEIGHT / 2);
@@ -125,7 +126,8 @@ public class AirHockeyAppLauncher extends Application {
             puckXSpeed *= -1;
         }
 
-        if (puckYPosition < FIRST_PLAYER_Y_POS - PLAYER_HEIGHT) {
+        //changing players score;
+        if (puckYPosition < FIRST_PLAYER_Y_POS - PLAYER_WIDTH) {
             secondPlayerScore++;
             score.set(1, secondPlayerScore);
             gameStarted = false;
@@ -134,7 +136,7 @@ public class AirHockeyAppLauncher extends Application {
             }
         }
 
-        if (puckYPosition > SECOND_PLAYER_Y_POS + PLAYER_HEIGHT) {
+        if (puckYPosition > SECOND_PLAYER_Y_POS + PLAYER_WIDTH) {
             firstPlayerScore++;
             score.set(0, firstPlayerScore);
             gameStarted = false;
@@ -143,8 +145,9 @@ public class AirHockeyAppLauncher extends Application {
             }
         }
 
-        if (((puckYPosition + PUCK_RADIUS > SECOND_PLAYER_Y_POS) && puckXPosition >= secondPlayerXPos && puckXPosition <= secondPlayerXPos + PLAYER_HEIGHT) ||
-                ((puckYPosition < FIRST_PLAYER_Y_POS + PLAYER_WIDTH) && puckXPosition >= firstPlayerXPos && puckXPosition <= firstPlayerXPos + PLAYER_HEIGHT)) {
+        //player controller settings;
+        if (((puckYPosition + PUCK_RADIUS > SECOND_PLAYER_Y_POS) && puckXPosition >= secondPlayerXPos && puckXPosition <= secondPlayerXPos + PLAYER_WIDTH) ||
+                ((puckYPosition < FIRST_PLAYER_Y_POS + PLAYER_HEIGHT) && puckXPosition >= firstPlayerXPos && puckXPosition <= firstPlayerXPos + PLAYER_WIDTH)) {
             puckXSpeed += 1 * Math.signum(puckXSpeed);
             puckYSpeed += 1 * Math.signum(puckYSpeed);
             puckYSpeed *= -1;
@@ -157,7 +160,7 @@ public class AirHockeyAppLauncher extends Application {
     }
 
     private void moveAIPlayer() {
-        double targetXPos = puckXPosition - PLAYER_HEIGHT / 2;
+        double targetXPos = puckXPosition - PLAYER_WIDTH / 2;
 
         double movementSpeed = 2.0;
 
@@ -169,7 +172,7 @@ public class AirHockeyAppLauncher extends Application {
     }
 
     private void renderGraphics(GraphicsContext graphicsContext) {
-        getGameLogic(graphicsContext);
+        runGameLogic(graphicsContext);
     }
 
     private void showErrorDialog() {
@@ -181,7 +184,7 @@ public class AirHockeyAppLauncher extends Application {
     }
 
     private static boolean checkServerRunning() {
-        try (Socket socket = new Socket("localhost", PORT)) {
+        try (Socket socket = new Socket(HOST, PORT)) {
             return true;
         } catch (IOException e) {
             return false;

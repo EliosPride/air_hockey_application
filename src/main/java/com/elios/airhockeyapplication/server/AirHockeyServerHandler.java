@@ -1,14 +1,14 @@
-package com.elios.air_hockey_application.server;
+package com.elios.airhockeyapplication.server;
 
-import com.elios.air_hockey_application.common.GameStateMessage;
+import com.elios.airhockeyapplication.server.entity.GameStateMessage;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.elios.air_hockey_application.common.AppConfiguration.BACKGROUND_HEIGHT;
-import static com.elios.air_hockey_application.common.AppConfiguration.BACKGROUND_WIDTH;
+import static com.elios.airhockeyapplication.common.AppConfiguration.BACKGROUND_HEIGHT;
+import static com.elios.airhockeyapplication.common.AppConfiguration.BACKGROUND_WIDTH;
 
 public class AirHockeyServerHandler extends ChannelHandlerAdapter {
 
@@ -77,7 +77,7 @@ public class AirHockeyServerHandler extends ChannelHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        cause.printStackTrace();
+        System.out.println("System error is occurred");
         ctx.close();
     }
 

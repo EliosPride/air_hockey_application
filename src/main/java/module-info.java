@@ -6,6 +6,6 @@ module com.elios.air_hockey_application {
     requires org.kordamp.bootstrapfx.core;
     requires netty.all;
 
-    opens com.elios.air_hockey_application to javafx.fxml;
-    exports com.elios.air_hockey_application;
+    opens com.elios.airhockeyapplication to javafx.fxml;
+    exports com.elios.airhockeyapplication;
 }
