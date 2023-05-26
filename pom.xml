@@ -75,7 +75,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                com.elios.air_hockey_application/com.elios.air_hockey_application.AirHockeyAppLauncher
+                                com.elios.air_hockey_application/com.elios.airhockeyapplication.AirHockeyAppLauncher
                             </mainClass>
                         </configuration>
                     </execution>

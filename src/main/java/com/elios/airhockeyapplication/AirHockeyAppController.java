@@ -1,4 +1,4 @@
-package com.elios.air_hockey_application;
+package com.elios.airhockeyapplication;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

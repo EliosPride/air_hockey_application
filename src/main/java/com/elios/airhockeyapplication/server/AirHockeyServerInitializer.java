@@ -1,4 +1,4 @@
-package com.elios.air_hockey_application.server;
+package com.elios.airhockeyapplication.server;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;

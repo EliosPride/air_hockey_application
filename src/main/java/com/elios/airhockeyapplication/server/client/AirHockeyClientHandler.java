@@ -1,4 +1,4 @@
-package com.elios.air_hockey_application.server;
+package com.elios.airhockeyapplication.server.client;
 
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
@@ -24,7 +24,7 @@ public class AirHockeyClientHandler extends ChannelHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        cause.printStackTrace();
+        System.out.println("System error occurred");
         ctx.close();
     }
 }
