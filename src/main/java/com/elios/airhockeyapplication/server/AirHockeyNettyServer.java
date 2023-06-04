@@ -10,21 +10,32 @@ import static com.elios.airhockeyapplication.common.AppConfiguration.*;
 
 public class AirHockeyNettyServer {
 
-    public static void main(String[] args) throws InterruptedException {
-        NioEventLoopGroup group = new NioEventLoopGroup();
+    public static void main(String[] args) {
+        Thread serverThread = new Thread(new ServerRunnable());
+        serverThread.start();
+    }
 
-        try {
-            ServerBootstrap bootstrap = new ServerBootstrap()
-                    .group(group)
-                    .channel(NioServerSocketChannel.class)
-                    .childHandler(new AirHockeyServerInitializer());
+    private static class ServerRunnable implements Runnable {
+        @Override
+        public void run() {
+            NioEventLoopGroup group = new NioEventLoopGroup(THREADS);
 
-            ChannelFuture future = bootstrap.bind(HOST, PORT).sync();
-            System.out.println("Server started on: " + HOST + ":" + PORT);
+            try {
+                ServerBootstrap bootstrap = new ServerBootstrap()
+                        .group(group)
+                        .channel(NioServerSocketChannel.class)
+                        .childHandler(new AirHockeyServerInitializer());
 
-            future.channel().closeFuture().sync();
-        } finally {
-            group.shutdownGracefully();
+                ChannelFuture future = bootstrap.bind(HOST, PORT).sync();
+                System.out.println("Server started on: " + HOST + ":" + PORT);
+
+                future.channel().closeFuture().sync();
+            } catch (InterruptedException e) {
+                System.out.println("Error occurred during" + e.getMessage());
+            } finally {
+                group.shutdownGracefully();
+            }
         }
     }
 }
+
