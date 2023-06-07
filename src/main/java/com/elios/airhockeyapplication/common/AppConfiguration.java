@@ -10,5 +10,6 @@ public class AppConfiguration {
     public static final double PUCK_RADIUS = 30;
     public static final int PLAYER_WIDTH = 70;
     public static final int PLAYER_HEIGHT = 40;
-    public static final int THREADS = 4;
+    public static final int WORKER_THREADS = 4;
+    public static final int BOSS_THREADS = 4;
 }

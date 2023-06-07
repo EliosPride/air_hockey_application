@@ -2,6 +2,7 @@ package com.elios.airhockeyapplication.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
@@ -18,11 +19,12 @@ public class AirHockeyNettyServer {
     private static class ServerRunnable implements Runnable {
         @Override
         public void run() {
-            NioEventLoopGroup group = new NioEventLoopGroup(THREADS);
+            EventLoopGroup bossGroup = new NioEventLoopGroup(BOSS_THREADS);
+            EventLoopGroup workerGroup = new NioEventLoopGroup(WORKER_THREADS);
 
             try {
                 ServerBootstrap bootstrap = new ServerBootstrap()
-                        .group(group)
+                        .group(bossGroup, workerGroup)
                         .channel(NioServerSocketChannel.class)
                         .childHandler(new AirHockeyServerInitializer());
 
@@ -33,9 +35,9 @@ public class AirHockeyNettyServer {
             } catch (InterruptedException e) {
                 System.out.println("Error occurred during" + e.getMessage());
             } finally {
-                group.shutdownGracefully();
+                bossGroup.shutdownGracefully();
+                workerGroup.shutdownGracefully();
             }
         }
     }
 }
-

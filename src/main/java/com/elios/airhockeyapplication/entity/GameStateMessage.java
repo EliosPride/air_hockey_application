@@ -1,4 +1,4 @@
-package com.elios.airhockeyapplication.server.entity;
+package com.elios.airhockeyapplication.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,4 +14,5 @@ public class GameStateMessage {
     private int puckYPosition;
     private int firstPlayerScore;
     private int secondPlayerScore;
+    private boolean gameStarted;
 }

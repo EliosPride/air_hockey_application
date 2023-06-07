@@ -1,4 +1,4 @@
-package com.elios.airhockeyapplication.server.client;
+package com.elios.airhockeyapplication.client;
 
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;

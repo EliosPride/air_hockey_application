@@ -1,6 +1,6 @@
-package com.elios.airhockeyapplication.server.client;
+package com.elios.airhockeyapplication.client;
 
-import com.elios.airhockeyapplication.server.entity.GameStateMessage;
+import com.elios.airhockeyapplication.entity.GameStateMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.bootstrap.Bootstrap;
@@ -62,8 +62,8 @@ public class AirHockeyClient {
         }
     }
 
-    public void sendMessage(double firstPlayerXPos, double secondPlayerXPos, int puckXPosition, int puckYPosition, int firstPlayerScore, int secondPlayerScore) {
-        GameStateMessage gameStateMessage = new GameStateMessage(firstPlayerXPos, secondPlayerXPos, puckXPosition, puckYPosition, firstPlayerScore, secondPlayerScore);
+    public void sendMessage(double firstPlayerXPos, double secondPlayerXPos, int puckXPosition, int puckYPosition, int firstPlayerScore, int secondPlayerScore, boolean gameStarted) {
+        GameStateMessage gameStateMessage = new GameStateMessage(firstPlayerXPos, secondPlayerXPos, puckXPosition, puckYPosition, firstPlayerScore, secondPlayerScore, gameStarted);
 
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonMessage;
