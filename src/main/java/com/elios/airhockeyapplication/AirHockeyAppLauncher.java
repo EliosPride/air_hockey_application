@@ -1,6 +1,6 @@
 package com.elios.airhockeyapplication;
 
-import com.elios.airhockeyapplication.server.client.AirHockeyClient;
+import com.elios.airhockeyapplication.client.AirHockeyClient;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -78,7 +78,7 @@ public class AirHockeyAppLauncher extends Application {
         runGameLogic(graphicsContext);
 
         if (airHockeyClient != null && checkServerRunning()) {
-            airHockeyClient.sendMessage(firstPlayerXPos, secondPlayerXPos, puckXPosition, puckYPosition, firstPlayerScore, secondPlayerScore);
+            airHockeyClient.sendMessage(firstPlayerXPos, secondPlayerXPos, puckXPosition, puckYPosition, firstPlayerScore, secondPlayerScore, gameStarted);
         }
 
         renderGraphics(graphicsContext);
